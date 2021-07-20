@@ -12,6 +12,7 @@ class EnterpriseTable
     public const STATUS = 'objstatus'; // Статус ОЕ
     public const PARENTS = 'parents';
     public const IS_ROOT = 'is_root'; // Root элемент
+    public const QUOTA = 'quota'; // Квота предприятия по сотрудникам
 
     public static $tID = self::TABLE . '.' . self::ID;
     public static $tIDREF = self::TABLE . '.' . self::IDREF;
@@ -19,6 +20,7 @@ class EnterpriseTable
     public static $tSTATUS = self::TABLE . '.' . self::STATUS;
     public static $tPARENTS = self::TABLE . '.' . self::PARENTS;
     public static $tIS_ROOT = self::TABLE . '.' . self::IS_ROOT;
+    public static $tQUOTA = self::TABLE . '.' . self::QUOTA;
 
     public const FILLABLE = [
         self::ID,
@@ -26,7 +28,8 @@ class EnterpriseTable
         self::SNAME,
         self::STATUS,
         self::PARENTS,
-        self::IS_ROOT
+        self::IS_ROOT,
+        self::QUOTA
     ];
 
     public const SORTABLE = [

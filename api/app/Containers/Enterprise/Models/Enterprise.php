@@ -2,6 +2,7 @@
 
 namespace App\Containers\Enterprise\Models;
 
+use App\Containers\User\Models\UserAsup;
 use App\Ship\App\Enterprise\EnterpriseTable;
 use App\Ship\Parents\Models\Model;
 use Smiarowski\Postgres\Model\Traits\PostgresArray;
@@ -37,5 +38,10 @@ class Enterprise extends Model
     public function getParentsAttribute($value)
     {
         return self::accessPgArray($value);
+    }
+
+    public function user_asup()
+    {
+        return $this->hasMany(UserAsup::class, 'orgid', 'objid');
     }
 }

@@ -7,6 +7,7 @@ use App\Containers\User\Models\User;
 use App\Containers\User\Models\UserAsup;
 use App\Containers\User\Tables\UsersTable;
 use App\Ship\Parents\Models\UserModel;
+use Carbon\Carbon;
 use Smiarowski\Postgres\Model\Traits\PostgresArray;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -87,5 +88,100 @@ trait TestAuthenticationHelperTrait
             $userAsup->getIntegrationid()
         )
             ->get()->first();
+    }
+
+    public function createEnterprisesAndUsersForQuota() :Enterprise
+    {
+        $enterprise = factory(Enterprise::class)->create([
+            'objid'     => 11111111,
+            'objidref'  => 8800000,
+            'objsname'  => 'ООО Самая лучшая компания',
+            'objstatus' => null,
+            'is_root'   => false,
+            'parents'   => null,
+            'quota'     => 5
+        ]);
+
+        factory(User::class)->create([
+            'id'                => 5,
+            'integration_id'    => '1',
+            'type'              => 'user',
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(User::class)->create([
+            'id'                => 2,
+            'integration_id'    => '2',
+            'type'              => 'user',
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(User::class)->create([
+            'id'                => 3,
+            'integration_id'    => '3',
+            'type'              => 'user',
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(User::class)->create([
+            'id'                => 4,
+            'integration_id'    => '4',
+            'type'              => 'user',
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(UserAsup::class)->create([
+            'number'            => 1,
+            'fullname'          => 'Тестов Тест Тестович',
+            'email'             => 'user1@nor.com',
+            'integration_id'    => '1',
+            'orgid'             => 11111111,
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(UserAsup::class)->create([
+            'number'            => 2,
+            'fullname'          => 'Абрикосов Абрикос Абрикосович',
+            'email'             => 'user2@nor.com',
+            'integration_id'    => '2',
+            'orgid'             => 11111111,
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(UserAsup::class)->create([
+            'number'            => 3,
+            'fullname'          => 'Огурцов Огурец Огурцович',
+            'email'             => 'user3@nor.com',
+            'integration_id'    => '3',
+            'orgid'             => 11111111,
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        factory(UserAsup::class)->create([
+            'number'            => 4,
+            'fullname'          => 'Молодцов Молодец Молодцович',
+            'email'             => 'user4@nor.com',
+            'integration_id'    => '4',
+            'orgid'             => 11111111,
+            'created_at'        => Carbon::now(),
+            'updated_at'        => Carbon::now(),
+            'deleted_at'        => null
+        ]);
+
+        return $enterprise;
     }
 }

@@ -3,49 +3,48 @@ declare(strict_types=1);
 
 namespace App\Containers\Enterprise\Tests\V1;
 
-use App\Containers\Enterprise\Models\Enterprise;
+use App\Containers\Enterprise\Mail\EnterprisesQuotaEmail;
 use App\Containers\Enterprise\Tests\EnterpriseTestCase;
+use Illuminate\Support\Facades\Mail;
 
 final class SendEmailEnterprisesListTest extends EnterpriseTestCase
 {
-    protected $endpoint = '';
+    protected $endpoint = 'get@/v1/enterprises-quota';
 
+    /**
+     * Тест выборки предприятия с квотой
+     */
+    public function testItQuotaWithEnterprises():void
+    {
+
+       $enterprise = $this->createEnterprisesAndUsersForQuota();
+
+        $response = $this->makeCall(
+            [],
+            $this->getAuthorizationParams()
+        );
+        $data = $response->decodeResponseJson()['data'];
+        self::assertSame($enterprise->objid, $data[0]['objid']);
+
+    }
+
+    /**
+     * Тест отправки email
+     */
     public function testItSendEmailWithEnterprises():void
     {
-        $mainEnterprise = factory(Enterprise::class)->create(
-            [
-                'objid' => 8800000,
-                'objidref' => 8800000,
-                'objsname' => 'Головной офис',
-                'is_root' => true,
-            ]
+        Mail::fake();
+        $this->createEnterprisesAndUsersForQuota();
+
+        $response = $this->makeCall(
+            [],
+            $this->getAuthorizationParams()
         );
+        $data = $response->decodeResponseJson()['data'];
 
-        $enterprise = factory(Enterprise::class)->create(
-            [
-                'objid' => 11111111,
-                'objidref' => 8800000,
-                'objsname' => 'ООО Самая лучшая компания',
-                'is_root' => false,
-            ]
-        );
-
-        $count = 1;
-        while ($count < 5) {
-            $count++;
-            $this->getUserForTest(
-                [
-                    'user_asup' => [
-                        'orgid' => $enterprise->getAttribute('objid'),
-                    ]
-                ]
-            );
-        }
-
-//        $response = $this->makeCall(
-//            [],
-//            $this->getAuthorizationParams()
-//        );
-//        $data = $response->decodeResponseJson()['data'];
+        Mail::assertSent(EnterprisesQuotaEmail::class, function ($mail) use ($data) {
+            $mail->build();
+            return $mail->hasTo(config('mail.to.support.address'));
+        });
     }
 }

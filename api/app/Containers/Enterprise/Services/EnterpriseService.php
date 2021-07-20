@@ -17,4 +17,9 @@ class EnterpriseService implements EnterpriseServiceInterface
     {
         return Apiato::call(EnterpriseTasks::GET_ALL_BY_PARENT_TASK, [$parent]);
     }
+
+    public function getQuotaExceeded()
+    {
+        return Apiato::call(EnterpriseTasks::GET_QUOTA_EXCEEDED_TASK, []);
+    }
 }
